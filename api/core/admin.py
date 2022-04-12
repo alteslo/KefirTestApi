@@ -9,7 +9,15 @@ class MyUserAdmin(UserAdmin):
     model = MyUser
     add_form = MyUserCreationForm
     form = MyUserChangeForm
-    list_display = ['username', 'first_name', 'birthday', 'email', 'phone', 'city', 'is_admin']
+    list_display = [
+        'username',
+        'first_name',
+        'birthday',
+        'email',
+        'phone',
+        'city',
+        'is_admin'
+    ]
     list_editable = ('is_admin',)
     fieldsets = (
         (None, {

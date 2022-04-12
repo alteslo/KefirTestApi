@@ -27,8 +27,8 @@ class MyUser(AbstractUser):
     city = models.ForeignKey(
         Cities, models.SET_NULL, blank=True, null=True)
     birthday = models.DateField(verbose_name='Birthday', blank=True, null=True)
-    additional_info = models.CharField(
-        verbose_name='Additional Info', max_length=250
+    additional_info = models.TextField(
+        verbose_name='Additional Info', blank=True
     )
     is_admin = models.BooleanField(verbose_name='Is Admin', default=True)
     password = models.CharField(verbose_name='Password', max_length=128)
