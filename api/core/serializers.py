@@ -4,7 +4,7 @@ from core.models import Cities, MyUser
 
 
 class UsersSerializer(serializers.ModelSerializer):
-    '''Данные о текущем пользователе'''
+    '''Сериализатор данных о всех пользователях'''
 
     class Meta:
         model = MyUser
@@ -13,6 +13,22 @@ class UsersSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email'
+        ]
+
+
+class CurrentUsersSerializer(serializers.ModelSerializer):
+    '''Сериализатор данных доступных пользователю о самом себе'''
+
+    class Meta:
+        model = MyUser
+        fields = [
+            'first_name',
+            'last_name',
+            'other_name',
+            'email',
+            'phone',
+            'birthday',
+            'is_admin'
         ]
 
 
