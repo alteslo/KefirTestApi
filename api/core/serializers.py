@@ -32,6 +32,21 @@ class CurrentUsersSerializer(serializers.ModelSerializer):
         ]
 
 
+class CurrentUsersPUTCHSerializer(serializers.ModelSerializer):
+    '''Сериализатор данных доступных пользователю для редактирования'''
+
+    class Meta:
+        model = MyUser
+        fields = [
+            'first_name',
+            'last_name',
+            'other_name',
+            'email',
+            'phone',
+            'birthday',
+        ]
+
+
 class CitiesSerializer(serializers.ModelSerializer):
 
     class Meta:

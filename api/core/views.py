@@ -1,10 +1,9 @@
-from rest_framework import generics, pagination, permissions
+from rest_framework import generics, pagination, permissions, status
 from rest_framework.response import Response
 
 from core.models import MyUser
-from core.serializers import CurrentUsersSerializer, UsersSerializer
-
-from rest_framework import status
+from core.serializers import (CurrentUsersPUTCHSerializer,
+                              CurrentUsersSerializer, UsersSerializer)
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -38,7 +37,8 @@ class CurrentUserView(generics.GenericAPIView):
 
 class CurrentUserPUTCHView(generics.UpdateAPIView):
     '''Информация, доступная пользователю о самом себе'''
-    serializer_class = CurrentUsersSerializer
+
+    serializer_class = CurrentUsersPUTCHSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = MyUser.objects.all()
 
