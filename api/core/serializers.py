@@ -52,3 +52,20 @@ class CitiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cities
         fields = '__all__'
+
+
+class PrivateUsersSerializer(serializers.ModelSerializer):
+    '''Сериализатор данных о всех пользователях доступный админу'''
+    city = serializers.SlugRelatedField(
+        slug_field="name", queryset=MyUser.objects.all()
+    )
+
+    class Meta:
+        model = MyUser
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'city'
+        ]

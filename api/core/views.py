@@ -1,9 +1,9 @@
-from rest_framework import generics, pagination, permissions, status
+from rest_framework import generics, pagination, permissions, status, viewsets
 from rest_framework.response import Response
 
 from core.models import MyUser
 from core.serializers import (CurrentUsersPUTCHSerializer,
-                              CurrentUsersSerializer, UsersSerializer)
+                              CurrentUsersSerializer, UsersSerializer, PrivateUsersSerializer)
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -51,3 +51,15 @@ class CurrentUserPUTCHView(generics.UpdateAPIView):
             kwargs['partial'] = True
             return self.update(request, pk, **kwargs)
         return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class PrivateUsersViewSet(viewsets.ModelViewSet):
+    queryset = MyUser.objects.all()
+    serializer_class = PrivateUsersSerializer
+    pagination_class = PageNumberSetPagination
+    # permission_classes = [IsAccountAdminOrReadOnly]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = MyUser.objects.only('id', 'first_name')
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
