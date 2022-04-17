@@ -57,7 +57,7 @@ class CitiesSerializer(serializers.ModelSerializer):
 class PrivateUsersSerializer(serializers.ModelSerializer):
     '''Сериализатор данных о всех пользователях доступный админу'''
     city = serializers.SlugRelatedField(
-        slug_field="name", queryset=MyUser.objects.all()
+        slug_field="city", queryset=Cities.objects.all()
     )
 
     class Meta:
@@ -72,7 +72,9 @@ class PrivateUsersSerializer(serializers.ModelSerializer):
             'birthday',
             'city',
             'additional_info',
-            'is_admin'
+            'is_admin',
+            'username',
+            'password'
         ]
 
 

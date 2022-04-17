@@ -3,14 +3,14 @@ from django.db import models
 
 
 class Cities(models.Model):
-    name = models.CharField(max_length=120, verbose_name='City')
+    city = models.CharField(max_length=120, verbose_name='City')
 
     class Meta:
         verbose_name = 'Город'
         verbose_name_plural = 'Города'
 
     def __str__(self):
-        return self.name
+        return self.city
 
 
 class MyUser(AbstractUser):
