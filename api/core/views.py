@@ -1,9 +1,11 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, pagination, permissions, status, viewsets
 from rest_framework.response import Response
 
 from core.models import MyUser
 from core.serializers import (CurrentUsersPUTCHSerializer,
-                              CurrentUsersSerializer, UsersSerializer, PrivateUsersSerializer)
+                              CurrentUsersSerializer, PrivateUsersSerializer, PrivateGETUsersSerializer,
+                              UsersSerializer)
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -60,6 +62,6 @@ class PrivateUsersViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAccountAdminOrReadOnly]
 
     def retrieve(self, request, *args, **kwargs):
-        instance = MyUser.objects.only('id', 'first_name')
-        serializer = self.get_serializer(instance)
+        instance = self.get_object()
+        serializer = PrivateGETUsersSerializer(instance)
         return Response(serializer.data)

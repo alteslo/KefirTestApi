@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from core.views import CurrentUserView, UsersAPIView, CurrentUserPUTCHView, PrivateUsersViewSet
-
+from core.views import (CurrentUserPUTCHView, CurrentUserView,
+                        PrivateUsersViewSet, UsersAPIView)
 router = DefaultRouter()
 router.register('users', PrivateUsersViewSet, basename='private')
 

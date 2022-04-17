@@ -66,6 +66,24 @@ class PrivateUsersSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
+            'other_name',
             'email',
-            'city'
+            'phone',
+            'birthday',
+            'city',
+            'additional_info',
+            'is_admin'
+        ]
+
+
+class PrivateGETUsersSerializer(serializers.ModelSerializer):
+    '''Сериализатор кратких данных пользователя доступных админу'''
+
+    class Meta:
+        model = MyUser
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'email'
         ]
