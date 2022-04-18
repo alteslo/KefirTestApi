@@ -1,11 +1,11 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import generics, pagination, permissions, status, viewsets
 from rest_framework.response import Response
 
 from core.models import MyUser
 from core.serializers import (CurrentUsersPUTCHSerializer,
-                              CurrentUsersSerializer, PrivateUsersSerializer, PrivateGETUsersSerializer,
-                              UsersSerializer)
+                              CurrentUsersSerializer,
+                              PrivateGETUsersSerializer,
+                              PrivateUsersSerializer, UsersSerializer)
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
