@@ -10,28 +10,27 @@ class MyUserAdmin(UserAdmin):
     add_form = MyUserCreationForm
     form = MyUserChangeForm
     list_display = [
-        'username',
+        'email',
         'first_name',
         'birthday',
-        'email',
         'phone',
         'city',
         'is_admin'
     ]
+    list_display_links = ('email',)
     list_editable = ('is_admin',)
+    ordering = ('date_joined',)
     fieldsets = (
         (None, {
-            "fields": ("username", "password")
+            "fields": ('email', 'password')
         }),
         ('Personal info', {
             "fields": (
-                ("first_name", "last_name"),
+                ("first_name", "last_name", "is_admin"),
                 "other_name",
-                ("email", "phone"),
-                "city",
+                ("phone", "city"),
                 "birthday",
-                "additional_info",
-                "is_admin"
+                "additional_info"
             )
         }),
         ('Permissions', {
