@@ -59,7 +59,12 @@ class MyUser(AbstractUser):
     phone = models.CharField(verbose_name='Phone', max_length=12, blank=True)
 
     city = models.ForeignKey(
-        Cities, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='City')
+        Cities,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='City'
+    )
 
     birthday = models.DateField(verbose_name='Birthday', null=True, blank=True)
     additional_info = models.TextField(
