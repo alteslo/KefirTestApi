@@ -5,7 +5,7 @@ from core.models import MyUser
 from core.serializers import (CurrentUsersPUTCHSerializer,
                               CurrentUsersSerializer,
                               PrivateGETUsersSerializer,
-                              PrivateUsersSerializer, UsersSerializer)
+                              PrivateLISTUsersSerializer, UsersSerializer)
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -56,12 +56,26 @@ class CurrentUserPUTCHView(generics.UpdateAPIView):
 
 
 class PrivateUsersViewSet(viewsets.ModelViewSet):
+    '''Пользовательский viewset поддерживающий CRUD методы'''
     queryset = MyUser.objects.all()
-    serializer_class = PrivateUsersSerializer
+    serializer_class = PrivateGETUsersSerializer
     pagination_class = PageNumberSetPagination
     # permission_classes = [IsAccountAdminOrReadOnly]
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = PrivateGETUsersSerializer(instance)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = PrivateLISTUsersSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = PrivateGETUsersSerializer(page, many=True)
         return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        if 'password' in request.data.keys():
+            data = {"code": 400, "message": "Изменение пароля не разрешено"}
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
