@@ -2,11 +2,11 @@ from rest_framework import generics, pagination, permissions, status, viewsets
 from rest_framework.response import Response
 
 from core.models import MyUser
+from core.permissions import IsOwnerOrReadOnly, MyIsAdmin
 from core.serializers import (CurrentUsersPUTCHSerializer,
                               CurrentUsersSerializer,
                               PrivateGETUsersSerializer,
                               PrivateLISTUsersSerializer, UsersSerializer)
-from core.permissions import MyIsAdmin, IsOwnerOrReadOnly
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
