@@ -1,6 +1,6 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
-from django.contrib.auth.hashers import make_password
 
 
 class Cities(models.Model):
@@ -18,9 +18,6 @@ class Cities(models.Model):
 class MyUserManager(UserManager):
     '''Кастомный UserManager не требующий username'''
     def _create_user(self, email, password, **extra_fields):
-        """
-        Create and save a user with the given username, email, and password.
-        """
         if not email:
             raise ValueError("The given email must be set")
         email = self.normalize_email(email)

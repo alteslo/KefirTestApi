@@ -6,6 +6,7 @@ from core.serializers import (CurrentUsersPUTCHSerializer,
                               CurrentUsersSerializer,
                               PrivateGETUsersSerializer,
                               PrivateLISTUsersSerializer, UsersSerializer)
+from core.permissions import MyIsAdmin, IsOwnerOrReadOnly
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -20,14 +21,14 @@ class UsersAPIView(generics.ListAPIView):
 
     queryset = MyUser.objects.all()
     serializer_class = UsersSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated, )
     pagination_class = PageNumberSetPagination
 
 
 class CurrentUserView(generics.GenericAPIView):
     '''Информация, доступная пользователю о самом себе'''
     serializer_class = CurrentUsersSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request, *args, **kwargs):
         return Response({
@@ -41,18 +42,12 @@ class CurrentUserPUTCHView(generics.UpdateAPIView):
     '''Информация, доступная пользователю о самом себе'''
 
     serializer_class = CurrentUsersPUTCHSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     queryset = MyUser.objects.all()
 
     def put(self, request, *args, **kwargs):
         data = {"detail": "Метод \"PUT\" не разрешен."}
         return Response(data, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def partial_update(self, request, pk, **kwargs):
-        if request.user.id == pk:
-            kwargs['partial'] = True
-            return self.update(request, pk, **kwargs)
-        return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class PrivateUsersViewSet(viewsets.ModelViewSet):
@@ -60,7 +55,7 @@ class PrivateUsersViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.all()
     serializer_class = PrivateGETUsersSerializer
     pagination_class = PageNumberSetPagination
-    # permission_classes = [IsAccountAdminOrReadOnly]
+    permission_classes = (permissions.IsAuthenticated, MyIsAdmin)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -78,4 +73,5 @@ class PrivateUsersViewSet(viewsets.ModelViewSet):
             data = {"code": 400, "message": "Изменение пароля не разрешено"}
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
         kwargs['partial'] = True
+        print(f'\n{kwargs=}')
         return self.update(request, *args, **kwargs)

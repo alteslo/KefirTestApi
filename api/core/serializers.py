@@ -59,6 +59,7 @@ class PrivateGETUsersSerializer(serializers.ModelSerializer):
     city = serializers.SlugRelatedField(
         slug_field="city", queryset=Cities.objects.all(), required=False
     )
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = MyUser
@@ -73,9 +74,14 @@ class PrivateGETUsersSerializer(serializers.ModelSerializer):
             'birthday',
             'city',
             'additional_info',
-            'is_admin'
+            'is_admin',
+            'password'
         ]
-        optional_fields = ('city', )
+        optional_fields = ('city', 'password')
+
+    def create(self, validated_data):
+        instance = MyUser.objects.create_user(**validated_data)
+        return instance
 
 
 class PrivateLISTUsersSerializer(serializers.ModelSerializer):
