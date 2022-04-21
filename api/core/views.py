@@ -58,6 +58,7 @@ class PrivateUsersViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated, MyIsAdmin)
 
     def list(self, request, *args, **kwargs):
+        '''Краткая информация обо всех пользователях'''
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)

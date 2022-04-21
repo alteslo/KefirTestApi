@@ -7,9 +7,9 @@ router = DefaultRouter()
 router.register('users', PrivateUsersViewSet, basename='private')
 
 urlpatterns = [
-    path('', include('rest_framework.urls')),
-    path('users/current/', CurrentUserView.as_view()),
-    path('users/<int:pk>/', CurrentUserPUTCHView.as_view()),
-    path('users/', UsersAPIView.as_view()),
-    path("private/", include(router.urls))
+    path('auth/', include('rest_framework.urls')),
+    path('user/users/current/', CurrentUserView.as_view()),
+    path('user/users/<int:pk>/', CurrentUserPUTCHView.as_view()),
+    path('user/users/', UsersAPIView.as_view()),
+    path("admin/private/", include(router.urls))
 ]
