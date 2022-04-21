@@ -113,5 +113,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': '/api/auth/login',
+    'LOGOUT_URL': '/api/auth/logout/',
+}
+
 AUTH_USER_MODEL = 'core.MyUser'
 LOGIN_REDIRECT_URL = '/api/user/users/current/'
