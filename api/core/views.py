@@ -1,4 +1,5 @@
-from rest_framework import generics, pagination, permissions, status, viewsets
+from rest_framework import (generics, mixins, pagination, permissions, status,
+                            viewsets)
 from rest_framework.response import Response
 
 from core.models import MyUser
@@ -38,19 +39,21 @@ class CurrentUserView(generics.GenericAPIView):
         })
 
 
-class CurrentUserPUTCHView(generics.UpdateAPIView):
-    '''Информация, доступная пользователю о самом себе'''
+class CurrentUserPUTCHView(mixins.UpdateModelMixin, generics.GenericAPIView):
+    '''Изменение данных пользователя'''
 
     serializer_class = CurrentUsersPUTCHSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     queryset = MyUser.objects.all()
 
-    def put(self, request, *args, **kwargs):
-        data = {"detail": "Метод \"PUT\" не разрешен."}
-        return Response(data, status.HTTP_405_METHOD_NOT_ALLOWED)
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 
-class PrivateUsersViewSet(viewsets.ModelViewSet):
+class PrivateUsersViewSet(
+    mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin, viewsets.GenericViewSet
+):
     '''Пользовательский viewset поддерживающий CRUD методы'''
     queryset = MyUser.objects.all()
     serializer_class = PrivateGETUsersSerializer
@@ -69,10 +72,19 @@ class PrivateUsersViewSet(viewsets.ModelViewSet):
         serializer = PrivateGETUsersSerializer(page, many=True)
         return Response(serializer.data)
 
-    def partial_update(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         if 'password' in request.data.keys():
             data = {"code": 400, "message": "Изменение пароля не разрешено"}
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-        kwargs['partial'] = True
-        print(f'\n{kwargs=}')
-        return self.update(request, *args, **kwargs)
+        return self.partial_update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        '''Изменение информации о пользователе'''
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
