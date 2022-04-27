@@ -11,10 +11,35 @@ from core.serializers import (CurrentUsersPUTCHSerializer,
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
+    """
+    A simple page number based style that supports page numbers as
+    query parameters. For example:
+
+    http://api.example.org/accounts/?page=4
+    http://api.example.org/accounts/?page=4&size=100
+    """
+
     page_size = 3
     page_query_param = 'page'
     page_size_query_param = 'size'
     ordering = 'date_joined'
+
+    def get_paginated_response(self, data):
+        query_size = self.request.query_params.get('size')
+
+        if query_size is None:
+            query_size = self.page_size
+
+        return Response({
+            'data': data,
+            "meta": {
+                'pagination': {
+                    'total': self.page.paginator.num_pages,
+                    'page': self.page.number,
+                    'size': int(query_size)
+                }
+            },
+        })
 
 
 class UsersAPIView(generics.ListAPIView):
