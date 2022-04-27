@@ -10,6 +10,7 @@ urlpatterns = [
     path('auth/', include('rest_framework.urls')),
     path('user/users/current/', CurrentUserView.as_view()),
     path('user/users/<int:pk>/', CurrentUserPUTCHView.as_view()),
-    path('user/users/', UsersAPIView.as_view()),
+    path('user/users/', UsersAPIView.as_view(),
+         name='general_users_information'),
     path("admin/private/", include(router.urls))
 ]

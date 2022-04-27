@@ -28,6 +28,7 @@ class UsersAPIView(generics.ListAPIView):
 
 class CurrentUserView(generics.GenericAPIView):
     '''Информация, доступная пользователю о самом себе'''
+
     serializer_class = CurrentUsersSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
@@ -55,6 +56,7 @@ class PrivateUsersViewSet(
     mixins.DestroyModelMixin, viewsets.GenericViewSet
 ):
     '''Пользовательский viewset поддерживающий CRUD методы'''
+
     queryset = MyUser.objects.all()
     serializer_class = PrivateGETUsersSerializer
     pagination_class = PageNumberSetPagination
@@ -62,8 +64,8 @@ class PrivateUsersViewSet(
 
     def list(self, request, *args, **kwargs):
         '''Краткая информация обо всех пользователях'''
-        queryset = self.filter_queryset(self.get_queryset())
 
+        queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = PrivateLISTUsersSerializer(page, many=True)
@@ -80,8 +82,10 @@ class PrivateUsersViewSet(
 
     def partial_update(self, request, *args, **kwargs):
         '''Изменение информации о пользователе'''
+
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
