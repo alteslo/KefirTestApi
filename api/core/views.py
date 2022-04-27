@@ -12,8 +12,8 @@ from core.serializers import (CurrentUsersPUTCHSerializer,
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
     """
-    A simple page number based style that supports page numbers as
-    query parameters. For example:
+    Простой пагинатор, который поддерживает номера страниц
+    как параметры запроса. Например:
 
     http://api.example.org/accounts/?page=4
     http://api.example.org/accounts/?page=4&size=100
