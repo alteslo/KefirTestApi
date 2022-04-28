@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import (generics, mixins, pagination, permissions, status,
                             viewsets)
 from rest_framework.response import Response
@@ -49,6 +50,42 @@ class UsersAPIView(generics.ListAPIView):
     serializer_class = UsersSerializer
     permission_classes = (permissions.IsAuthenticated, )
     pagination_class = PageNumberSetPagination
+
+
+class LoginView(generics.GenericAPIView):
+    '''Вход в систему'''
+
+    serializer_class = CurrentUsersSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+
+        username = data.get('login', None)
+        password = data.get('password', None)
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+
+                login(request, user)
+                serializer = self.get_serializer(user)
+
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class LogoutView(generics.GenericAPIView):
+    '''Выход из системы'''
+
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
 
 
 class CurrentUserView(generics.GenericAPIView):

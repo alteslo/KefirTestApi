@@ -5,14 +5,6 @@ from rest_framework.test import APITestCase
 
 from core.models import MyUser
 
-# class UserFactory(factory.Factory):
-#     class Meta:
-#         model = MyUser
-#     first_name = factory.Faker('first_name')
-#     email = factory.Faker('email')
-#     is_admin = False
-#     password = factory.Faker('password')
-
 
 class MyUserTests(APITestCase):
     def setUp(self):
@@ -31,12 +23,37 @@ class MyUserTests(APITestCase):
 
         self.client.login(username='aaa@net.com', password='0112358')
 
-        url = reverse('general_users_information')  # + '?page=4&size=2'
-        print(f'{url=}')
+        url = reverse('general_users_information')
         response = self.client.get(url, format='json')
-        results = response.json()
-        print(f'\n{results=}\n')
+        pagination_data = response.json().get('meta').get('pagination')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(MyUser.objects.count(), 11)
-        # self.assertEqual(MyUser.objects.get().name, 'DabApps')
+        self.assertEqual(pagination_data.get('page'), 1)
+        self.assertEqual(pagination_data.get('size'), 3)
+
+        PAGE = 4
+        SIZE = 2
+        url += f'?page={PAGE}&size={SIZE}'
+        response = self.client.get(url, format='json')
+        pagination_data = response.json().get('meta').get('pagination')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(pagination_data.get('page'), PAGE)
+        self.assertEqual(pagination_data.get('size'), SIZE)
+
+        data_fields = [
+            field for field in response.json().get('data')[0].keys()
+        ]
+        self.assertEqual(
+            data_fields, ['id', 'first_name', 'last_name', 'email']
+        )
+
+    def test_get_general_users_information_unauth(self):
+
+        self.client.logout()
+
+        url = reverse('general_users_information')
+        response = self.client.get(url, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

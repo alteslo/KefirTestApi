@@ -119,4 +119,3 @@ SWAGGER_SETTINGS = {
 }
 
 AUTH_USER_MODEL = 'core.MyUser'
-LOGIN_REDIRECT_URL = '/api/user/users/current/'
