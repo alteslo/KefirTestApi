@@ -95,11 +95,8 @@ class CurrentUserView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request, *args, **kwargs):
-        return Response({
-            'user': CurrentUsersSerializer(
-                request.user, context=self.get_serializer_context()
-            ).data,
-        })
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CurrentUserPUTCHView(mixins.UpdateModelMixin, generics.GenericAPIView):
