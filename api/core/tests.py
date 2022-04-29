@@ -56,4 +56,4 @@ class MyUserTests(APITestCase):
         url = reverse('general_users_information')
         response = self.client.get(url, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
