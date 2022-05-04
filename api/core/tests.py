@@ -88,34 +88,25 @@ class MyUserTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_putch_current_user_information(self):
-        user = MyUser.objects.get(email='aaa@net.com')
-        
-        response = client.get('http://testserver/homepage/')
-        assert response.status_code == 200
-        csrftoken = response.cookies['csrftoken']
-
-        # Interact with the API.
-        response = client.post('http://testserver/organisations/', json={
-            'name': 'MegaCorp',
-            'status': 'active'
-        }, headers={'X-CSRFToken': csrftoken})
-assert response.status_code == 200
-        
-        
+    def test_patch_current_user_information(self):
         self.client.login(username='aaa@net.com', password='0112358')
+        user = MyUser.objects.get(email='aaa@net.com')
         url = f'/api/user/users/{user.id}/'
+        user = MyUser.objects.get(email='aaa@net.com')
+        data = {
+            'phone': '+7777777778',
+            'birthday': '2022-03-28'
+        }
 
+        response = self.client.patch(url, data, format='json')
         data = {
             'first_name': '',
             'last_name': '',
             'other_name': '',
-            'phone': '',
-            'birthday': '2022-04-29'
+            'email': 'aaa@net.com',
+            'phone': '+7777777778',
+            'birthday': '2022-03-28'
         }
 
-        response = self.client.patch(url, data, format='json')
-        print(f'{response}')
-
-        # response = self.client.get(url, format='json')
-        # self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, data)
