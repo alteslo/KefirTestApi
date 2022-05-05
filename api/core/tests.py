@@ -99,7 +99,7 @@ class MyUserTests(APITestCase):
         }
 
         response = self.client.patch(url, data, format='json')
-        data = {
+        eq_data = {
             'first_name': '',
             'last_name': '',
             'other_name': '',
@@ -109,4 +109,12 @@ class MyUserTests(APITestCase):
         }
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, data)
+        self.assertEqual(response.data, eq_data)
+
+        data = {
+            'phone': '+7777777778',
+            'is_admin': 'True'
+        }
+
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
