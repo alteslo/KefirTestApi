@@ -107,6 +107,15 @@ class CurrentUserPUTCHView(mixins.UpdateModelMixin, generics.GenericAPIView):
     queryset = MyUser.objects.all()
 
     def patch(self, request, *args, **kwargs):
+        serializer = self.get_serializer()
+        serializer_fields = list(serializer.fields.keys())
+        for data_field in request.data.keys():
+            if data_field not in serializer_fields:
+                data = {
+                    'code': 400,
+                    'message': f'Изменение {data_field} не разрешено'
+                }
+                return Response(data, status.HTTP_400_BAD_REQUEST)
         return self.partial_update(request, *args, **kwargs)
 
 
