@@ -9,12 +9,19 @@ from core.models import MyUser
 class MyUserTests(APITestCase):
     def setUp(self):
         fake = Faker()
+
         MyUser.objects.create_user(
             email='aaa@net.com',
             is_admin=True,
             password='0112358',
             birthday='2022-04-29')
-        for _ in range(10):
+        MyUser.objects.create_user(
+            email='bbb@daa.com',
+            is_admin=False,
+            password='0112358',
+            birthday='2020-01-20')
+
+        for _ in range(9):
             MyUser.objects.create_user(
                 email=fake.email(),
                 password=fake.password(),
@@ -23,6 +30,8 @@ class MyUserTests(APITestCase):
             )
 
     def test_get_general_users_information(self):
+        PAGE = 4
+        SIZE = 2
 
         self.client.login(username='aaa@net.com', password='0112358')
 
@@ -35,8 +44,6 @@ class MyUserTests(APITestCase):
         self.assertEqual(pagination_data.get('page'), 1)
         self.assertEqual(pagination_data.get('size'), 3)
 
-        PAGE = 4
-        SIZE = 2
         url += f'?page={PAGE}&size={SIZE}'
         response = self.client.get(url, format='json')
         pagination_data = response.json().get('meta').get('pagination')
@@ -118,3 +125,8 @@ class MyUserTests(APITestCase):
 
         response = self.client.patch(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_list_private_user(self):
+        url = '/api/admin/private/users/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
