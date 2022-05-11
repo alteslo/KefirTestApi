@@ -3,7 +3,7 @@ from rest_framework import (generics, mixins, pagination, permissions, status,
                             viewsets)
 from rest_framework.response import Response
 
-from core.models import MyUser
+from core.models import MyUser, Cities
 from core.permissions import IsOwnerOrReadOnly, MyIsAdmin
 from core.serializers import (CurrentUsersPUTCHSerializer,
                               CurrentUsersSerializer,
@@ -143,13 +143,19 @@ class PrivateUsersViewSet(
         return Response(serializer.data)
 
     def patch(self, request, *args, **kwargs):
-        if 'password' in request.data.keys():
-            data = {"code": 400, "message": "Изменение пароля не разрешено"}
-            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
         return self.partial_update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
         '''Изменение информации о пользователе'''
+
+        if 'password' in request.data.keys():
+            data = {"code": 400, "message": "Изменение пароля не разрешено"}
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'city' in request.data.keys():
+            city = request.data.get('city')
+            if Cities.objects.filter(city=city).exists() is False:
+                Cities.objects.create(city=city)
 
         instance = self.get_object()
         serializer = self.get_serializer(
