@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from core.models import Cities, MyUser
+from rest_framework import serializers
 
 
 class UsersSerializer(serializers.ModelSerializer):

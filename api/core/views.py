@@ -1,14 +1,13 @@
-from django.contrib.auth import authenticate, login, logout
-from rest_framework import (generics, mixins, pagination, permissions, status,
-                            viewsets)
-from rest_framework.response import Response
-
-from core.models import MyUser, Cities
+from core.models import Cities, MyUser
 from core.permissions import IsOwnerOrReadOnly, MyIsAdmin
 from core.serializers import (CurrentUsersPUTCHSerializer,
                               CurrentUsersSerializer,
                               PrivateGETUsersSerializer,
                               PrivateLISTUsersSerializer, UsersSerializer)
+from django.contrib.auth import authenticate, login, logout
+from rest_framework import (generics, mixins, pagination, permissions, status,
+                            viewsets)
+from rest_framework.response import Response
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
