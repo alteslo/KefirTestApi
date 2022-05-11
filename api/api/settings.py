@@ -8,7 +8,7 @@ env = config.load_config('api/.env')
 
 SECRET_KEY = env.django.sekret_key
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'corsheaders',
 
     'core'
 ]
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,3 +121,10 @@ SWAGGER_SETTINGS = {
 }
 
 AUTH_USER_MODEL = 'core.MyUser'
+
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost",
+    "http://localhost:8080",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1",
+]
