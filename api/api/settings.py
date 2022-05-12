@@ -10,7 +10,7 @@ SECRET_KEY = env.django.sekret_key
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.django.allowed_hosts.split(' ')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,8 +60,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env.db.engine,
+        'NAME': BASE_DIR / env.db.name,
+        "USER": env.db.user,
+        "PASSWORD": env.db.password,
+        "HOST": env.db.host,
+        "PORT": env.db.name,
     }
 }
 

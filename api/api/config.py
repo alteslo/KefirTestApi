@@ -6,6 +6,7 @@ from environs import Env
 @dataclass
 class DjangoConfig:
     sekret_key: str
+    allowed_hosts: str
 
 
 @dataclass
@@ -15,7 +16,7 @@ class DBConfig:
     user: str
     password: str
     host: str
-    port: int
+    port: str
 
 
 @dataclass
@@ -30,7 +31,8 @@ def load_config(path: str = None):
 
     return Config(
         django=DjangoConfig(
-            sekret_key=env.str('SECRET_KEY')
+            sekret_key=env.str('SECRET_KEY'),
+            allowed_hosts=env.str('ALLOWED_HOSTS')
         ),
         db=DBConfig(
             name=env.str('POSTGRES_DB'),
@@ -38,6 +40,6 @@ def load_config(path: str = None):
             user=env.str('POSTGRES_USER'),
             password=env.str('POSTGRES_PASSWORD'),
             host=env.str('POSTGRES_HOST'),
-            port=env.int('POSTGRES_PORT')
+            port=env.str('POSTGRES_PORT')
         )
     )
