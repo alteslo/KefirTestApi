@@ -21,10 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'drf_yasg',
     'corsheaders',
 
-    'core'
+    'core',
+
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -104,8 +105,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://127.0.0.1:3000"]
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "core.authentication.SessionAuthentication"
@@ -119,6 +118,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissions",
     ),
 }
+
 
 SWAGGER_SETTINGS = {
     'LOGIN_URL': '/api/auth/login/',

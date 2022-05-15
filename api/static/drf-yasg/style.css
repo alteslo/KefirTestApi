@@ -71,3 +71,7 @@ svg.swagger-defs {
     width: 0;
     height: 0;
 }
+
+button.btn.authorize {
+    visibility: hidden;
+}
