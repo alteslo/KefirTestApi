@@ -59,8 +59,8 @@ class LoginView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-
-        username = data.get('login', None)
+        print(f'Запрос на логин {data=}')
+        username = data.get('email', None)
         password = data.get('password', None)
 
         user = authenticate(username=username, password=password)

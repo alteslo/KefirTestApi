@@ -132,3 +132,6 @@ db.sqlite3
 sqlite.db
 
 .vscode/
+
+!api/*/migrations/__init__.py
+api/*/migrations/*

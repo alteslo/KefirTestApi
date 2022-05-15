@@ -67,7 +67,7 @@ class MyUser(AbstractUser):
     additional_info = models.TextField(
         verbose_name='Additional Info', blank=True
     )
-    is_admin = models.BooleanField(verbose_name='Is Admin')
+    is_admin = models.BooleanField(verbose_name='Is Admin', null=True)
     password = models.CharField(verbose_name='Password', max_length=128)
     username = models.CharField(max_length=150, unique=False)
 

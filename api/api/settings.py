@@ -61,11 +61,11 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': env.db.engine,
-        'NAME': BASE_DIR / env.db.name,
+        'NAME': env.db.name,
         "USER": env.db.user,
         "PASSWORD": env.db.password,
         "HOST": env.db.host,
-        "PORT": env.db.name,
+        "PORT": env.db.port,
     }
 }
 
@@ -97,6 +97,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -120,7 +121,7 @@ REST_FRAMEWORK = {
 }
 
 SWAGGER_SETTINGS = {
-    'LOGIN_URL': '/api/auth/login',
+    'LOGIN_URL': '/api/auth/login/',
     'LOGOUT_URL': '/api/auth/logout/',
 }
 
