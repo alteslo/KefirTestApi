@@ -1,0 +1,9 @@
+SECRET_KEY = django_key
+ALLOWED_HOSTS = 'localhost 127.0.0.1 [::1]'
+
+POSTGRES_DB=имя_твоей_бд
+POSTGRES_ENGINE=django.db.backends.postgresql
+POSTGRES_USER=имя_твоего_пользователя
+POSTGRES_PASSWORD=пароль_бд
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
